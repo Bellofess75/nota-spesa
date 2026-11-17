@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b6e8a"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-title" content="Nota Spese">
+<title>Nota Spesa Trasferta</title>
+<style>
+:root{--bg:#eef2f4;--sf:#fff;--ink:#14232b;--mu:#5d6f78;--ln:#d3dde2;--ac:#0b6e8a;--ccc:#1f5fbf;--cash:#2a7d4f;--z:#8a6d1d;--bad:#b3261e;box-sizing:border-box;padding-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));padding-bottom:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px))}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10181c;--sf:#1a262c;--ink:#e8f0f3;--mu:#92a6af;--ln:#2c3b43;--ac:#4cc0e0;--ccc:#7fb0ff;--cash:#6fd49a;--z:#e0c070;--bad:#ff8a80}}
+*{box-sizing:border-box}html{scroll-padding-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,"SF Pro Text",system-ui,sans-serif;padding:0 14px 90px}
+h1{font-size:22px;margin:16px 0 2px}h2{font-size:15px;margin:22px 0 8px;color:var(--mu);font-weight:600}
+.sub{color:var(--mu);font-size:14px;margin:0 0 8px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:13px;color:var(--mu);margin-bottom:3px}
+input,select,button{font:inherit;width:100%;padding:10px;border:1px solid var(--ln);border-radius:9px;background:var(--bg);color:var(--ink);min-height:44px}
+button.p{background:var(--ac);color:#fff;border:0;font-weight:600;margin-top:12px}
+button.s{width:auto;min-height:36px;padding:4px 10px;background:none;color:var(--bad);border:0}
+.big{font-size:30px;font-weight:700;letter-spacing:-.5px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--ln)}th:first-child,td:first-child{text-align:left}th{color:var(--mu);font-weight:600}
+.ccc{color:var(--ccc)}.cash{color:var(--cash)}.z{color:var(--z)}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--ln)}.it small{color:var(--mu);display:block}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:6px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--sf);border-top:1px solid var(--ln);padding:6px 8px calc(6px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)))}
+nav button{border:0;background:none;min-height:44px;color:var(--mu);font-size:13px}nav button.on{color:var(--ac);font-weight:700}
+.sec{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin:0 0 10px}
+.hint{color:var(--mu);font-size:13px;margin:-4px 0 10px}
+#d1,#d2,#dt{min-height:34px;height:34px;padding:2px 8px;font-size:14px;line-height:30px;-webkit-appearance:none;appearance:none;text-align:left;min-width:0}
+.row+.row,.row+.f,.f+.row,.f+.f,.f+details,.row+details{margin-top:10px}
+#c .row>*{min-width:0}
+details.card{padding:0}details.card>summary{font-weight:600;padding:14px 12px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+details.card>summary::-webkit-details-marker{display:none}details.card>summary::after{content:"\203A";color:var(--mu);font-size:20px;line-height:1;transform:rotate(90deg);transition:transform .15s}
+details.card[open]>summary::after{transform:rotate(270deg)}details.card>.f{padding:0 12px 12px;margin-top:0}
+.v{display:none}.v.on{display:block}
+@media print{nav,button,.err{display:none!important}.v{display:none!important}#b{display:block!important}}
+</style></head><body>
+<h1>Nota spese trasferta</h1><p class="sub" id="per">Imposta le date della trasferta</p>
+<nav><button data-v="a" class="on">Spese</button><button data-v="b">Riepilogo</button><button data-v="c">Trasferta</button></nav>
+
+<section id="a" class="v on">
+<div class="card"><label>Voce di spesa</label><select id="voce"></select>
+<div class="row" style="margin-top:10px"><div><label>Importo</label><input id="imp" type="number" inputmode="decimal" step="0.01" placeholder="0,00"></div>
+<div><label>Valuta</label><select id="val"></select></div></div>
+<div class="row" style="margin-top:10px"><div><label>Data</label><input id="dt" type="date"></div><div><label>Nota</label><input id="nt" placeholder="facoltativa"></div></div>
+<div id="pw" style="margin-top:10px;display:none"><label>Persone tra cui dividere la spesa</label><select id="pers"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+<div style="margin-top:10px"><label>Foto scontrino (facoltativa)</label><input id="ph" type="file" accept="image/*"></div>
+<div class="err" id="err"></div><button class="p" id="add">Aggiungi spesa</button><button class="p" id="can" style="display:none;background:none;color:var(--mu);border:1px solid var(--ln);margin-top:8px">Annulla modifica</button></div>
+<h2>Spese inserite</h2><div class="card" id="lst"></div></section>
+
+<section id="b" class="v">
+<div class="card"><label>Contanti da dare / avere (EUR)</label><div class="big" id="dare">0,00</div><div class="sub" id="dd"></div></div>
+<div class="card"><label>Rimborso forfettario (25,82)</label><div class="big" id="ffv">0,00</div><div class="sub" id="ffn"></div></div>
+<div class="card" id="dis" style="display:none"><label>Eccesso paesi disagiati (limite 50 EUR a settimana)</label><div class="big" id="disv">0,00</div><div class="sub" id="disn"></div></div>
+<div class="card"><label>Contanti rimanenti (EUR)</label><div class="big" id="rim">0,00</div><div class="sub">Anticipo + prelievi ATM − spese in contanti</div></div>
+<div class="card"><table id="tot"></table></div><div class="card" id="vit"></div><div class="card" id="cur"></div>
+<div class="card"><button class="p" id="cp" style="margin:0">Copia riepilogo</button><button class="p" id="pd" style="margin-top:8px">Salva PDF</button><div class="err" id="cpm" style="color:var(--mu)"></div></div></section>
+
+<section id="c" class="v">
+<div class="card"><h3 class="sec">Dati personali</h3>
+<div class="row"><div><label>Nome</label><input id="nome" autocomplete="given-name"></div><div><label>Cognome</label><input id="cognome" autocomplete="family-name"></div></div>
+<div class="row"><div><label>Matricola</label><input id="matr" autocomplete="off"></div><div><label>Nome cliente</label><input id="cliente" autocomplete="off"></div></div></div>
+
+<div class="card"><h3 class="sec">Periodo e anticipo</h3>
+<div class="row"><div><label>Dal</label><input id="d1" type="date"></div><div><label>Al</label><input id="d2" type="date"></div></div>
+<div class="row"><div><label>Anticipo (EUR)</label><input id="ant" type="number" inputmode="decimal" step="0.01"></div><input id="atm" type="hidden"></div>
+<div class="row"><div><label>Anticipo in valuta</label><input id="antv" type="number" inputmode="decimal" step="0.01"></div><div><label>Valuta dell’anticipo</label><div class="sub" id="antn" style="padding:10px 0"></div><input id="antc" type="hidden"></div></div></div>
+
+<div class="card"><h3 class="sec">Valute e cambi</h3>
+<p class="hint">Cambio = quante unità di valuta valgono 1 EUR.</p>
+<div class="row"><div><label>Seconda valuta</label><select id="v2"></select></div><div><label>Cambio</label><input id="tasso" type="number" inputmode="decimal" step="0.0001"></div></div>
+<div class="row"><div><label>Terza valuta</label><select id="v3"></select></div><div><label>Cambio</label><input id="tasso3" type="number" inputmode="decimal" step="0.0001"></div></div></div>
+
+<div class="card"><h3 class="sec">Tipo di trasferta e alloggio</h3>
+<div class="f"><label>Tipo di trasferta</label><select id="tipot"><option value="M">Con massimali</option><option value="I">Senza massimali (ispettore)</option></select></div>
+<div class="row"><div><label>Alloggio</label><select id="alloggio"><option value="H">Hotel</option><option value="A">Appartamento</option></select></div><div><label>Rientro dopo le 19</label><select id="rientro"><option value="0">No</option><option value="1">Sì</option></select></div></div>
+<div class="row"><div id="colw"><label>Colazione in hotel</label><select id="colz"><option value="I">Inclusa nel prezzo</option><option value="B">A parte (massimale settimanale)</option></select></div><div><label>Tips fuori media</label><select id="tips"><option value="0">No</option><option value="1">Sì</option></select></div></div></div>
+
+<div class="card"><h3 class="sec">Massimali</h3>
+<div class="f"><label>Valuta dei massimali</label><select id="capv"></select></div>
+<div class="row"><div><label>Vitto al giorno</label><input id="cap" type="number" inputmode="decimal" step="0.01"></div><div><label>Colazione al giorno</label><input id="col" type="number" inputmode="decimal" step="0.01"></div></div>
+<div class="f"><label>Massimale ultimo giorno</label><div class="sub" id="ult"></div><input id="capl" type="hidden"></div></div>
+
+<div class="card"><h3 class="sec">Note spese salvate</h3>
+<input id="nm" placeholder="Nome, es. Giordania dic 2025"><button class="p" id="sv" style="margin-top:8px">Salva con questo nome</button><div id="sl"></div></div>
+
+<div class="card"><h3 class="sec">Azioni</h3><label>CSV spese (formato GD)</label><button class="p" id="csve" style="margin:0;background:var(--ccc)">Esporta CSV</button><div class="err" id="csvm" style="color:var(--mu)"></div>
+<label style="margin-top:14px">Nota completa con foto (ZIP)</label><button class="p" id="zipb" style="margin:0;background:var(--ccc)">Esporta ZIP</button><div class="hint" style="margin:6px 0 0">Nel foglio di salvataggio scegli OneDrive come posizione.</div><div class="err" id="zipm" style="color:var(--mu)"></div></div>
+
+<details class="card"><summary>Backup e altro</summary>
+<div class="f"><label>Backup</label><textarea id="bk" rows="4" placeholder="Qui compare il backup. Per ripristinare, incolla qui i dati e tocca Importa." style="width:100%;padding:10px;border:1px solid var(--ln);border-radius:9px;background:var(--bg);color:var(--ink);font:12px monospace"></textarea>
+<div class="row" style="margin-top:8px"><button class="p" id="bc" style="margin:0">Copia backup</button><button class="p" id="bi" style="margin:0;background:var(--ccc)">Importa</button></div><div class="err" id="bm" style="color:var(--mu)"></div></div>
+<div class="f"><button class="p" id="rst" style="margin:0;background:var(--bad)">Cancella tutte le spese</button></div></details>
+<p class="sub">I dati restano salvati solo su questo iPhone.</p>
+</section>
+
+<div id="dlg" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:20px"><div class="card" style="max-width:420px;width:100%;margin:0;max-height:85%;overflow:auto"><div id="dlgm" style="white-space:pre-wrap;margin-bottom:12px"></div><div id="dlgx"></div><div style="display:flex;gap:10px;margin-top:6px"><button class="p" id="dlgn" style="margin:0;flex:1;background:none;color:var(--mu);border:1px solid var(--ln)">Annulla</button><button class="p" id="dlgy" style="margin:0;flex:1">OK</button></div></div></div>
+<div id="ov" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.93);flex-direction:column;gap:10px;padding:calc(12px + max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px))) 12px calc(12px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)))"><div style="flex:1;min-height:0;overflow:auto;text-align:center"><img id="ovi" alt="Scontrino" style="max-width:100%;border-radius:8px"></div><div class="row"><button class="p" id="ovs" style="margin:0">Condividi / salva</button><button class="p" id="ovr" style="margin:0;background:var(--ccc)">Sostituisci</button><button class="p" id="ovd" style="margin:0;background:var(--bad)">Elimina foto</button><button class="p" id="ovc" style="margin:0;background:none;border:1px solid #888">Chiudi</button></div></div>
+<input id="ph2" type="file" accept="image/*" style="display:none">
+<script>
+/* Salvataggio file per la app installata: sostituisce la funzione dell'ambiente Claude.
+   Su iPhone/Android (app Capacitor) usa Filesystem + foglio di condivisione, dove compare anche OneDrive.
+   Nel browser/PWA usa la condivisione di sistema oppure il download. */
+(function(){
+var MIME={csv:"text/csv",pdf:"application/pdf",zip:"application/zip",json:"application/json",jpg:"image/jpeg",png:"image/png",txt:"text/plain"};
+function err(c,m){return{code:c,message:m||c}}
+function toBlob(d,n){if(d instanceof Blob)return d;var x=(n.split(".").pop()||"").toLowerCase();return new Blob([d],{type:MIME[x]||"application/octet-stream"})}
+function b64(b){return new Promise(function(ok,ko){var r=new FileReader();r.onload=function(){ok(String(r.result).split(",")[1])};r.onerror=function(){ko(r.error)};r.readAsDataURL(b)})}
+function isNative(){return !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())}
+async function saveNative(n,b){var P=window.Capacitor.Plugins,w=await P.Filesystem.writeFile({path:n,data:await b64(b),directory:"CACHE"});
+ try{await P.Share.share({title:n,url:w.uri,dialogTitle:"Salva o condividi"})}catch(e){if(/cancel/i.test(String(e&&e.message||e)))throw err("declined");throw e}}
+async function saveWeb(n,b){var f=new File([b],n,{type:b.type});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});return}catch(e){if(e&&e.name==="AbortError")throw err("declined")}}
+ var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},30000)}
+var dl={save:async function(o){var b=toBlob(o.data,o.filename);if(isNative())await saveNative(o.filename,b);else await saveWeb(o.filename,b);return{status:"saved"}}};
+window.claude={use:async function(n){return n==="downloads"?dl:null}};
+window.__saveShim={toBlob:toBlob,saveNative:saveNative,saveWeb:saveWeb};
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const VOCI=[["Acc.FLAT by CCC","Alloggio","CCC"],["Acc.FLAT Reimb","Alloggio","Cash"],["Acc.NO FLAT by CCC","Alloggio","CCC"],["Acc.NO FLAT Reimb","Alloggio","Cash"],["Breakfast CCC","Colazione","CCC"],["Breakfast HOTEL CCC","Colazione","CCC"],["Breakfast Reimb","Colazione","Cash"],["Car CCC","Trasporti","CCC"],["Car Reimb","Trasporti","Cash"],["Cash Stolen","Varie","Cash"],["Consumer Goods CCC","Varie","CCC"],["Consumer Goods Reimb","Varie","Cash"],["Exp oth Com CCC","Altro","CCC"],["Exp oth Com Reimb","Altro","Cash"],["Extra Baggage Paid by CCC","Bagaglio","CCC"],["Extra Baggage Reimb","Bagaglio","Cash"],["Infirmary Exp by CCC","Varie","CCC"],["Infirmary Exp Reimb","Varie","Cash"],["Invoice Paid CCC","Varie","CCC"],["Invoice Paid Reimb","Varie","Cash"],["Meal CCC","Meal","CCC"],["Meal Disad Places CCC","Varie","CCC"],["Meal Disad Places Reimb","Varie","Cash"],["Meal FATTURA IT CCC","Meal","CCC"],["Meal FATTURA IT Reimb","Meal","Cash"],["Meal Reimburse","Meal","Cash"],["Meal Rest.Ap.FATTURA IT CCC","Meal","CCC"],["Meal Rest.Ap.FATTURA IT Reimb","Meal","Cash"],["Meal Restaurant Ap. CCC","Meal","CCC"],["Meal Restaurant Ap. Reimburse","Meal","Cash"],["Med Exp by CCC","Varie","CCC"],["Med Exp Reimb","Varie","Cash"],["Med Exp Unisal by CCC","Varie","CCC"],["Med Exp Unisal Reimb","Varie","Cash"],["Mileage Reimbursement","Trasporti","Cash"],["Oth Non Trv Exp by CCC","Varie","CCC"],["Oth Non Trv Exp Reimb","Varie","Cash"],["Oth Trv Exp by CCC","Varie","CCC"],["Oth Trv Exp Reimb","Varie","Cash"],["Petrol-Abroad Reimb","Trasporti","Cash"],["Petrol-Abroad-Paid by CCC","Trasporti","CCC"],["Petrol-Ita-CARTA CARB CCC","Trasporti","CCC"],["Petrol-Ita-CARTA CARB Reimb","Trasporti","Cash"],["Petrol-Ita-Paid by CCC","Trasporti","CCC"],["Petrol-Ita-Paid Reimb","Trasporti","Cash"],["Phone/Internet CCC","Varie","CCC"],["Phone/Internet Reimb","Varie","Cash"],["Pocket Money","Altro","Cash"],["Purch.Breakf. Reimb","Colazione","Cash"],["Purch.Breakf.by CCC","Colazione","CCC"],["Rep.Exp.Clt NO BO CCC","Altro","CCC"],["Rep.Exp.Clt NO BO Reimb","Altro","Cash"],["Rep.Exp.Osp NO BO CCC","Altro","CCC"],["Rep.Exp.Osp NO BO Reimb","Altro","Cash"],["Rep.Exp.Oth CCC","Altro","CCC"],["Rep.Exp.Oth Reimb","Altro","Cash"],["Rientro in 2gg","Altro","Cash"],["Rimb. Forfett. (25,82)","Contanti","Cash"],["Service table Reimb","Meal","Cash"],["Tip Paid by CCC","Meal","CCC"],["Tip Reimb","Meal","Cash"],["Transport CCC","Trasporti","CCC"],["Transport Reimb","Trasporti","Cash"],["Weekly Breakfast by CCC","Colazione","CCC"],["Weekly Breakfast Reimb","Colazione","Cash"],["Withdrawal by CCC","Contanti","CCC"],["Appartamento","Appartamento","Cash"],["(W) Acc/Meal for Coll CCC","(W) Voice","CCC"],["(W) Acc/Meal for Coll Reimb","(W) Voice","Cash"],["(W) Oth Exp for Coll CCC","(W) Voice","CCC"],["(W) Oth Exp for Coll Reimb","(W) Voice","Cash"],["(Z) Accom FLAT by Colleag","Alloggio","(Z)"],["(Z) Accom NO FLAT by Colleag","Alloggio","(Z)"],["(Z) Breakfast Paid by Colleag","Colazione","(Z)"],["(Z) Meal Paid by Colleague","Meal","(Z)"],["(Z) Meal Rest.Ap. by Colleague","Meal","(Z)"],["(Z) Other Paid by Colleag","Varie","(Z)"],["(Z) Rientro Dopo le ore 19","Rientro","(Z)"],["(Z) Transport by Colleag","Trasporti","(Z)"],["(Z) Weekly Break by Colleag","Colazione","(Z)"],["Laundry Paid by CCC","Varie","CCC"],["Laundry Reimb","Varie","Cash"],["Lunch Paid by CCC","Meal","CCC"],["Lunch Reimb","Meal","Cash"],["(Z) Lunch Paid by Colleag","Meal","(Z)"]],CUR=["AFN", "ALL", "DZD", "AOA", "XCD", "ARS", "AMD", "AWG", "AUD", "AZN", "BSD", "BHD", "BDT", "BBD", "BYN", "BZD", "BMD", "BTN", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF", "KHR", "XAF", "CAD", "CVE", "KYD", "CLP", "CNY", "COP", "KMF", "CDF", "CRC", "HRK", "CUP", "CZK", "DKK", "DJF", "DOP", "ECS", "EGP", "SVC", "ERN", "ETB", "EUR", "FKP", "FJD", "GMD", "GEL", "GHS", "GIP", "GTQ", "GGP", "GNF", "GWP", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK", "INR", "IDR", "IRR", "IQD", "ILS", "XOF", "JMD", "JPY", "JOD", "KZT", "KES", "KPW", "KRW", "KWD", "KGS", "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "LTL", "MOP", "MKD", "MGA", "MWK", "MYR", "MVR", "MRO", "MUR", "MXN", "MDL", "MNT", "MAD", "MZN", "MMK", "NAD", "NPR", "ANG", "XPF", "NZD", "NIO", "NGN", "NOK", "OMR", "PKR", "PAB", "PGK", "PYG", "PEN", "PHP", "PLN", "QAR", "RON", "RUB", "RWF", "SHP", "WST", "STD", "SAR", "RSD", "SCR", "SLL", "SGD", "SKK", "SIT", "SBD", "SOS", "ZAR", "SSP", "LKR", "SDG", "SRD", "SZL", "SEK", "CHF", "SYP", "TWD", "TJS", "TZS", "THB", "TOP", "TTD", "TND", "TRY", "TMT", "UGX", "UAH", "AED", "GBP", "UYU", "USD", "UZS", "VUV", "VEF", "VND", "YER", "ZMW", "ZWD"];
+const $=i=>document.getElementById(i);
+let S={d1:"",d2:"",ant:0,atm:0,v2:"",tasso:1,cap:0,capl:0,ex:[]};
+try{const r=localStorage.getItem("ns1");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("ns1",JSON.stringify(S))}catch(e){}};
+const f=n=>n.toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2});
+const rate=c=>c==="EUR"?1:c===S.v2&&S.tasso>0?S.tasso:c===S.v3&&S.tasso3>0?S.tasso3:1;const toEur=e=>e.imp/rate(e.val);
+const ORD_I=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,80,81,82,83,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,84,74,75,76,77,78,79];
+function vo(e){const v=VOCI[e.v];return(S.tipot==="I"&&v[0]==="Service table Reimb")?[v[0],v[1],"CCC"]:v}
+function fillVoci(){const cur=$("voce").value,ord=S.tipot==="I"?ORD_I:VOCI.map((v,i)=>i).slice(0,80);$("voce").innerHTML=ord.map(i=>`<option value="${i}">${VOCI[i][0]}</option>`).join("");if([...$("voce").options].some(o=>o.value===cur))$("voce").value=cur}
+fillVoci();
+const opt=CUR.map(c=>`<option>${c}</option>`).join("");
+$("v2").innerHTML='<option value="">Nessuna</option>'+opt;$("v3").innerHTML='<option value="">Nessuna</option>'+opt;
+function vals(){$("val").innerHTML="<option>EUR</option>"+(S.v2?`<option>${S.v2}</option>`:"")+(S.v3&&S.v3!==S.v2?`<option>${S.v3}</option>`:"");$("v3").value=S.v3||"";$("tasso3").value=S.tasso3||"";$("capv").innerHTML="<option>EUR</option>"+(S.v2?`<option>${S.v2}</option>`:"")+(S.v3&&S.v3!==S.v2?`<option>${S.v3}</option>`:"");$("capv").value=S.capv||"EUR";$("alloggio").value=S.alloggio||"H";$("rientro").value=S.rientro||"0";$("tips").value=S.tips||"0";$("col").value=S.col||"";$("colw").style.display=S.alloggio==="A"?"none":"block";$("colz").value=S.colz||"I";if(S.nome===undefined&&S.cognome===undefined&&S.matr===undefined){try{const p=JSON.parse(localStorage.getItem("nsprof")||"{}");S.nome=p.nome||"";S.cognome=p.cognome||"";S.matr=p.matr||""}catch(e){}}if(S.nome||S.cognome||S.matr){try{localStorage.setItem("nsprof",JSON.stringify({nome:S.nome||"",cognome:S.cognome||"",matr:S.matr||""}))}catch(e){}}$("nome").value=S.nome||"";$("cognome").value=S.cognome||"";$("matr").value=S.matr||"";$("cliente").value=S.cliente||"";$("antn").textContent=S.v2?S.v2+" (seconda valuta)":"Imposta prima la seconda valuta";$("antv").value=S.antv||"";$("tipot").value=S.tipot||"M";fillVoci();updP();$("dt").min=S.d1?lowD(VOCI[+$("voce").value][0]):"";$("dt").max=S.d2||"";if(S.d1&&S.d2&&S.d1<=S.d2&&($("dt").value<$("dt").min||$("dt").value>S.d2))$("dt").value=$("dt").min}
+["d1","d2","ant","atm","v2","tasso","v3","tasso3","cap","capl","capv","alloggio","rientro","tips","col","colz","nome","cognome","matr","cliente","antv","antc","tipot"].forEach(k=>{$(k).value=S[k]||"";$(k).onchange=()=>{S[k]=["ant","atm","tasso","tasso3","cap","capl","col","antv"].includes(k)?parseFloat($(k).value)||(k==="tasso"?1:0):$(k).value;save();vals();draw()}});
+$("dt").value=new Date().toISOString().slice(0,10);
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button,.v").forEach(x=>x.classList.remove("on"));b.classList.add("on");$(b.dataset.v).classList.add("on");scrollTo(0,0)});
+$("add").onclick=()=>{const imp=parseFloat($("imp").value);if(!(imp>0)){$("err").textContent="Inserisci un importo maggiore di zero.";return}
+const dv=$("dt").value;if(!dv){$("err").textContent="Inserisci la data della spesa.";return}if(S.d1&&S.d2&&S.d1>S.d2){$("err").textContent="La data di inizio trasferta è dopo quella di fine: correggile in Trasferta.";return}const lo=S.d1?lowD(VOCI[+$("voce").value][0]):"";if((S.d1&&dv<lo)||(S.d2&&dv>S.d2)){$("err").textContent="La data deve essere compresa nella trasferta"+(S.d1&&S.d2?", dal "+d2g(lo).replace(/\./g,"/")+" al "+d2g(S.d2).replace(/\./g,"/"):"")+(lo&&lo<S.d1?" (i paesi disagiati possono partire 3 giorni prima)":"")+".";return}
+$("err").textContent="";const vc=VOCI[+$("voce").value][1],x={id:uid(),p:(vc==="Meal"||vc==="Colazione")?+$("pers").value||1:1,v:+$("voce").value,imp,val:$("val").value,dt:$("dt").value,nt:$("nt").value};if(ED>=0&&S.ex[ED]){x.id=S.ex[ED].id||x.id;S.ex[ED]=x}else S.ex.push(x);const pf=$("ph").files[0];$("ph").value="";cancelEd();save();draw();if(pf)savePh(x.id,pf)};
+$("rst").onclick=async()=>{if((await uiAsk("Cancellare tutte le spese inserite?"))){S.ex=[];save();draw()}};
+function sum(){const cats={};let cash=0;S.ex.forEach(e=>{const[v,c,p]=vo(e),x=toEur(e);(cats[c]=cats[c]||{CCC:0,Cash:0,"(Z)":0})[p]+=x;if(p==="Cash"&&c!=="Contanti")cash+=x/Math.max(1,e.p||1)});
+const atm=S.ex.filter(e=>VOCI[e.v][0]==="Withdrawal by CCC").reduce((a,e)=>a+toEur(e),0);
+return Object.assign({cats,cash,rim:antEur()+atm-cash},extra(atm,cash))}
+function curTable(){const by={};S.ex.forEach(e=>{const[n,c,p]=vo(e),r=(by[e.val]=by[e.val]||{});(r[c]=r[c]||{CCC:0,Cash:0,"(Z)":0})[p]+=e.imp});
+const ks=Object.keys(by).sort((a,b)=>a==="EUR"?-1:b==="EUR"?1:a<b?-1:1);
+$("cur").innerHTML=ks.length?ks.map(k=>{const t={CCC:0,Cash:0,"(Z)":0};let h=`<label>Spese in ${k}</label><table><tr><th>${k}</th><th class="ccc">CCC</th><th class="cash">Cash</th><th class="z">(Z)</th></tr>`;
+Object.keys(by[k]).sort().forEach(c=>{const r=by[k][c];h+=`<tr><td>${c}</td><td>${f(r.CCC)}</td><td>${f(r.Cash)}</td><td>${f(r["(Z)"])}</td></tr>`;for(const q in t)t[q]+=r[q]});
+h+=`<tr><th>Totale</th><th>${f(t.CCC)}</th><th>${f(t.Cash)}</th><th>${f(t["(Z)"])}</th></tr></table>`;
+if(k!=="EUR")h+=`<div class="sub">Pari a ${f((t.CCC+t.Cash+t["(Z)"])/rate(k))} EUR al cambio ${rate(k)}</div>`;return`<div style="margin-bottom:14px">${h}</div>`}).join(""):'<div class="sub">Nessuna spesa inserita.</div>'}
+let ED=-1;
+function cancelEd(){ED=-1;$("pers").value="1";$("imp").value="";$("nt").value="";$("add").textContent="Aggiungi spesa";$("can").style.display="none";$("err").textContent=""}
+function editEx(i){const e=S.ex[i];if(!e)return;ED=i;if(![...$("voce").options].some(o=>+o.value===e.v))$("voce").add(new Option(VOCI[e.v][0],e.v));$("voce").value=e.v;$("pers").value=e.p||1;updP();if(![...$("val").options].some(o=>o.value===e.val))$("val").add(new Option(e.val));$("val").value=e.val;$("imp").value=e.imp;$("dt").value=e.dt;$("nt").value=e.nt||"";$("add").textContent="Salva modifica";$("can").style.display="block";$("err").textContent="Stai modificando una spesa già inserita.";document.querySelector('nav button[data-v="a"]').click();scrollTo(0,0)}
+$("can").onclick=cancelEd;
+function antEur(){const c=S.v2||"";return(S.ant||0)+(c?(S.antv||0)/rate(c):0)}
+function nd(){return S.d1&&S.d2?Math.round((new Date(S.d2)-new Date(S.d1))/864e5)+1:0}
+const RA=["Meal Rest.Ap.FATTURA IT CCC","Meal Rest.Ap.FATTURA IT Reimb","Meal Restaurant Ap. CCC","Meal Restaurant Ap. Reimburse","Service table Reimb","Tip Paid by CCC","Tip Reimb","(Z) Meal Rest.Ap. by Colleague"],TIPN=["Service table Reimb","Tip Paid by CCC","Tip Reimb"];
+function extra(atm,cash){const tz=S.tasso>0?S.tasso:1,k=S.v2?tz:1,a=nd(),A=S.alloggio==="A",cc=S.capv||"EUR",r=rate(cc);
+const tot=(S.cap||0)+(A?(S.col||0):0),totE=tot/r,totV=S.v2?(cc===S.v2?tot:Math.round(totE*tz*100)/100):totE,m=S.cap>0&&S.tipot!=="I";
+const wd0=S.d1?(new Date(S.d1).getUTCDay()+6)%7:0;let forf=0,sp=0,sx=0,ll=0,bw={},dis={};
+S.ex.forEach(e=>{const[n,c]=VOCI[e.v],X=toEur(e),pp=Math.max(1,e.p||1),x=X/pp;if(n.indexOf("Rimb. Forfett")===0)forf+=X;if(n==="Meal Disad Places CCC"||n==="Meal Disad Places Reimb"){const di=S.d1?Math.round((new Date(e.dt)-new Date(S.d1))/864e5):0,w=Math.max(0,Math.min(53,Math.floor(di/7)+1));dis[w]=(dis[w]||0)+X}if(c==="Meal"&&S.d2&&e.dt===S.d2)ll+=x;
+if(c==="Colazione"&&!A&&S.colz==="B"&&S.d1){const di=Math.round((new Date(e.dt)-new Date(S.d1))/864e5);if(di>=0&&di<a){const w=Math.floor((di+wd0)/7);bw[w]=(bw[w]||0)+x*k}}
+let cnt=false;if(c==="Meal"){cnt=!(S.tips==="1"&&TIPN.indexOf(n)>=0)}else if(c==="Colazione"&&A)cnt=true;if(!cnt)return;
+const capd=m&&(!A||c==="Colazione"||RA.indexOf(n)>=0);
+if(capd&&S.v2&&e.val===S.v2){if(e.imp/pp>3*totV){sp+=3*totV/tz;sx+=(e.imp/pp-3*totV)/tz}else sp+=x}
+else if(capd&&x>3*totE){sp+=3*totE;sx+=x-3*totE}else sp+=x});
+let exW=0,exL=0,exB=0;if(!A&&S.colz==="B"&&S.col>0&&a>0&&S.d1&&S.tipot!=="I"){const cvb=S.v2?(cc===S.v2?S.col:Math.round(S.col/r*tz*100)/100):S.col/r,dw={};for(let i=0;i<a;i++){const w=Math.floor((i+wd0)/7);dw[w]=(dw[w]||0)+1}Object.keys(dw).forEach(w=>{const rem=dw[w]*cvb-(bw[w]||0);if(rem<0)exB-=rem});exB/=k}
+if(m&&a>0)exW=Math.max(0,sp*k-a*totV)/k+sx;
+let U=S.rientro==="1"?totE:(A?totE/2:35);if((A||S.rientro==="1")&&!(totE>0))U=0;
+if(S.d2&&U>0)exL=Math.max(0,ll-U);
+let exD=0;Object.keys(dis).forEach(w=>{if(dis[w]>50)exD+=dis[w]-50});
+return{forf,sp,totE,U,exW,exL,exB,exD,dare:antEur()+atm-cash-forf+exW+exL+exB+exD}}
+function draw(){const a=S.d1&&S.d2?Math.round((new Date(S.d2)-new Date(S.d1))/864e5)+1:0;
+$("per").textContent=a>0?`${a} giorni di trasferta, dal ${S.d1.split("-").reverse().join("/")} al ${S.d2.split("-").reverse().join("/")}`:"Imposta le date della trasferta";
+$("lst").innerHTML=S.ex.length?S.ex.map((e,i)=>({e,i})).sort((a,b)=>a.e.dt<b.e.dt?-1:a.e.dt>b.e.dt?1:VOCI[a.e.v][0].localeCompare(VOCI[b.e.v][0],"it")||a.i-b.i).map(({e,i})=>{const[v,c,p]=vo(e);return`<div class="it"><div>${v}<small>${(S.d1&&e.dt<lowD(VOCI[e.v][0]))||(S.d2&&e.dt>S.d2)?'<b style="color:var(--bad)">fuori trasferta</b> · ':""}${e.dt.split("-").reverse().join("/")} · ${c}${e.p>1?" · "+e.p+" persone, "+f(e.imp/e.p)+" a testa":""}${e.nt?" · "+e.nt:""}</small></div><div style="text-align:right"><b class="${p==="CCC"?"ccc":p==="Cash"?"cash":"z"}">${f(e.imp)} ${e.val}</b><br><button class="s" style="color:var(--ac)" onclick="phView(${i})">${e.id&&PH.has(e.id)?"Foto":"+ Foto"}</button><button class="s" style="color:var(--ac)" onclick="editEx(${i})">Modifica</button><button class="s" onclick="delEx(${i})">Elimina</button></div></div>`}).join(""):'<div class="sub">Nessuna spesa. Aggiungi la prima qui sopra.</div>';
+const s=sum();curTable();$("rim").textContent=f(s.rim);$("dare").textContent=f(s.dare);$("ult").textContent=s.U>0?f(s.U)+" EUR ("+(S.rientro==="1"?"rientro dopo le 19":S.alloggio==="A"?"metà massimale appartamento":"hotel, fisso")+")":"nessun limite impostato";$("ffv").textContent=f(s.forf);const nds=S.ex.filter(e=>VOCI[e.v][0].indexOf("Meal Disad Places")===0).length;$("dis").style.display=nds?"block":"none";$("disv").textContent=f(s.exD);$("disn").textContent=nds+" spese inserite. Le settimane sono di 7 giorni dalla data di partenza.";$("ffn").textContent=S.ex.filter(e=>VOCI[e.v][0].indexOf("Rimb. Forfett")===0).length+" voci inserite, 25,82 EUR ciascuna";$("dd").textContent=`Positivo = da dare, negativo = da avere. Forfettario ${f(s.forf)}, eccesso vitto ${f(s.exW)}, eccesso ultimo giorno ${f(s.exL)}, eccesso colazione ${f(s.exB)}, eccesso paesi disagiati ${f(s.exD)}.`;
+let t='<tr><th>Tutto in EUR</th><th class="ccc">CCC</th><th class="cash">Cash</th><th class="z">(Z)</th></tr>',T={CCC:0,Cash:0,"(Z)":0};
+Object.keys(s.cats).sort().forEach(c=>{const r=s.cats[c];t+=`<tr><td>${c}</td><td>${f(r.CCC)}</td><td>${f(r.Cash)}</td><td>${f(r["(Z)"])}</td></tr>`;for(const k in T)T[k]+=r[k]});
+t+=`<tr><th>Totale</th><th>${f(T.CCC)}</th><th>${f(T.Cash)}</th><th>${f(T["(Z)"])}</th></tr>`;$("tot").innerHTML=t;
+const ml=s.sp;
+if(a>0&&S.cap>0){const lim=s.totE*a,rm=lim-ml,ec=s.exW;$("vit").innerHTML=`<label>Vitto (stima, valori in EUR)</label><table><tr><td>Speso nella media (EUR)</td><td>${f(ml)}</td></tr><tr><td>Media al giorno (${a} gg, EUR)</td><td>${f(ml/a)}</td></tr><tr><td>Massimale totale (EUR)</td><td>${f(lim)}</td></tr><tr><td>Vitto rimanente (EUR)</td><td class="cash">${f(Math.max(0,rm))}</td></tr><tr><td>Eccesso (EUR)</td><td class="${ec>0?"z":""}">${f(ec)}</td></tr></table><div class="sub">Massimale × giorni − spese nella media, come nel foglio. Eccesso = quanto supera il massimale più le singole spese oltre 3 volte il massimale giornaliero. L’ultimo giorno è conteggiato a parte. Non gestisce snack né colazioni settimanali in hotel.</div>`}else $("vit").innerHTML='<label>Vitto</label><div class="sub">Imposta le date e il massimale vitto in Trasferta per vedere media, rimanente ed eccesso.</div>'}
+$("cp").onclick=async()=>{const s=sum();let x=([S.nome,S.cognome].filter(Boolean).join(" ")+(S.matr?" - matricola "+S.matr:"")).trim();x=(x?x+"\n":"")+(S.cliente?"Cliente: "+S.cliente+"\n":"")+$("per").textContent+"\n";Object.keys(s.cats).sort().forEach(c=>{const r=s.cats[c];x+=`${c}: CCC ${f(r.CCC)} / Cash ${f(r.Cash)} / (Z) ${f(r["(Z)"])}\n`});x+="Contanti rimanenti: "+f(s.rim)+" EUR";
+try{await navigator.clipboard.writeText(x);$("cpm").textContent="Riepilogo copiato."}catch(e){$("cpm").textContent="Copia non disponibile: seleziona il testo a mano."}};
+function lib(){try{return JSON.parse(localStorage.getItem("nslib")||"{}")}catch(e){return{}}}
+function wlib(o){try{localStorage.setItem("nslib",JSON.stringify(o))}catch(e){uiAlert("Impossibile salvare su questo dispositivo.")}}
+function sl(){const o=lib(),k=Object.keys(o).sort();$("sl").innerHTML=k.length?k.map(n=>`<div class="it"><div>${n.replace(/</g,"&lt;")}<small>${o[n].ex.length} spese</small></div><div><button class="s" style="color:var(--ac)" data-o="${encodeURIComponent(n)}">Apri</button><button class="s" data-d="${encodeURIComponent(n)}">Elimina</button></div></div>`).join(""):'<div class="sub">Nessuna nota salvata.</div>'}
+$("sv").onclick=async()=>{const n=$("nm").value.trim();if(!n){uiAlert("Scrivi un nome per la nota.");return}const o=lib();if(o[n]&&!(await uiAsk("Esiste già una nota con questo nome. Sovrascrivere?")))return;o[n]=JSON.parse(JSON.stringify(S));wlib(o);sl()};
+$("sl").onclick=async e=>{const b=e.target.closest("button");if(!b)return;const o=lib();if(b.dataset.o){const n=decodeURIComponent(b.dataset.o);if(!(await uiAsk("Aprire «"+n+"»? I dati attuali non salvati andranno persi.")))return;S=Object.assign({d1:"",d2:"",ant:0,atm:0,v2:"",tasso:1,cap:0,capl:0,ex:[]},o[n]);["d1","d2","ant","atm","v2","tasso","cap","capl"].forEach(k=>$(k).value=S[k]||"");$("nm").value=n;save();vals();draw()}else if(b.dataset.d){const n=decodeURIComponent(b.dataset.d);if((await uiAsk("Eliminare «"+n+"»?"))){delete o[n];wlib(o);sl()}}};
+async function pdf(ret){
+if(!window.jspdf){if(ret!==true)window.print();return null}
+const d=new window.jspdf.jsPDF({unit:"mm",format:"a4"}),s=sum(),L=14,nm=$("nm").value.trim()||"Nota spese";let y=18;
+const t=(x,yy,tx,al)=>d.text(String(tx),x,yy,al?{align:al}:undefined),B=()=>d.setFont("helvetica","bold"),N=()=>d.setFont("helvetica","normal");
+B();d.setFontSize(16);t(L,y,nm);y+=7;N();d.setFontSize(10);const who=[S.nome,S.cognome].filter(Boolean).join(" ")+(S.matr?" - matricola "+S.matr:"");if(who.trim()){t(L,y,who.trim());y+=6}if(S.cliente){t(L,y,"Cliente: "+S.cliente);y+=6}t(L,y,$("per").textContent);y+=8;
+t(L,y,"Contanti da dare / avere (EUR): "+f(s.dare));y+=5;t(L,y,"Contanti rimanenti (EUR): "+f(s.rim));y+=5;
+t(L,y,"Forfettario "+f(s.forf)+" - eccesso vitto "+f(s.exW)+" - eccesso ultimo giorno "+f(s.exL));y+=9;
+B();t(L,y,"Categoria (EUR)");t(120,y,"CCC","right");t(150,y,"Cash","right");t(180,y,"(Z)","right");y+=2;d.line(L,y,196,y);y+=5;N();
+Object.keys(s.cats).sort().forEach(c=>{const r=s.cats[c];t(L,y,c);t(120,y,f(r.CCC),"right");t(150,y,f(r.Cash),"right");t(180,y,f(r["(Z)"]),"right");y+=5});
+y+=6;B();t(L,y,"Spese inserite");y+=6;N();d.setFontSize(9);
+S.ex.slice().sort((a,b)=>a.dt<b.dt?-1:1).forEach(e=>{if(y>282){d.addPage();y=18}t(L,y,e.dt.split("-").reverse().join("/"));t(36,y,VOCI[e.v][0].slice(0,36));t(130,y,f(e.imp)+" "+e.val,"right");if(e.nt)t(134,y,e.nt.slice(0,34));y+=5});
+if(ret===true)return d.output("arraybuffer");
+const file=new File([d.output("blob")],(nm.replace(/[^\w -]/g,"").trim()||"nota-spese")+".pdf",{type:"application/pdf"});
+try{const dl=window.claude?await window.claude.use("downloads"):null;if(dl){try{await dl.save({filename:file.name,data:file});return}catch(e){if(e&&e.code==="declined")return}}}catch(e){}
+try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:nm});return}}catch(e){if(e.name==="AbortError")return}
+window.print()}
+const DEF=()=>({d1:"",d2:"",ant:0,atm:0,v2:"",tasso:1,cap:0,capl:0,ex:[]});
+$("bc").onclick=async()=>{const x=JSON.stringify({app:"nota-spese",v:1,S:S,lib:lib()});$("bk").value=x;
+try{await navigator.clipboard.writeText(x);$("bm").textContent="Backup copiato. Incollalo in Note o in una mail per conservarlo."}catch(e){$("bk").select();$("bm").textContent="Copia non riuscita: tieni premuto sul testo, seleziona tutto e copia."}};
+$("bi").onclick=async()=>{let o;try{o=JSON.parse($("bk").value)}catch(e){}
+if(!o||o.app!=="nota-spese"||!o.S||!Array.isArray(o.S.ex)){$("bm").textContent="Dati non validi: incolla un backup copiato da questa app.";return}
+if(!(await uiAsk("Importare il backup? La nota attuale verrà sostituita; le note salvate con lo stesso nome verranno sovrascritte.")))return;
+const ok=e=>VOCI[e.v]&&e.imp>0;S=Object.assign(DEF(),o.S);S.ex=S.ex.filter(ok);
+const nl={};Object.keys(o.lib||{}).forEach(n=>{const x=o.lib[n];if(x&&Array.isArray(x.ex))nl[n]=Object.assign(DEF(),x,{ex:x.ex.filter(ok)})});
+wlib(Object.assign(lib(),nl));
+["d1","d2","ant","atm","v2","tasso","cap","capl"].forEach(k=>$(k).value=S[k]||"");save();sl();vals();draw();$("bm").textContent="Backup importato."};
+function lowD(n){if(!S.d1)return"";if(n.indexOf("Meal Disad Places")!==0)return S.d1;const d=new Date(S.d1+"T00:00:00Z");d.setUTCDate(d.getUTCDate()-3);return d.toISOString().slice(0,10)}
+function updP(){const c=VOCI[+$("voce").value][1];$("pw").style.display=(c==="Meal"||c==="Colazione")?"block":"none";$("dt").min=S.d1?lowD(VOCI[+$("voce").value][0]):""}
+$("voce").onchange=updP;updP();
+function uiDlg(msg,o){o=o||{};return new Promise(res=>{$("dlgm").textContent=msg;const bx=$("dlgx");bx.innerHTML="";if(o.body)bx.appendChild(o.body);$("dlgy").textContent=o.ok||"OK";$("dlgn").style.display=o.single?"none":"block";$("dlg").style.display="flex";const done=v=>{$("dlg").style.display="none";res(v)};$("dlgy").onclick=()=>done(true);$("dlgn").onclick=()=>done(false)})}
+const uiAsk=m=>uiDlg(m,{ok:"Conferma"}),uiAlert=m=>{uiDlg(m,{single:1})};
+let PH=new Set(),DBP=null,CP=null;
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function db(){if(!DBP)DBP=new Promise((ok,ko)=>{try{const q=indexedDB.open("nsfoto",1);q.onupgradeneeded=()=>q.result.createObjectStore("f");q.onsuccess=()=>ok(q.result);q.onerror=()=>ko(q.error)}catch(e){ko(e)}});return DBP}
+function tx(m,fn){return db().then(d=>new Promise((ok,ko)=>{const t=d.transaction("f",m),r=fn(t.objectStore("f"));t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>ko(t.error)}))}
+const pPut=(id,v)=>tx("readwrite",s=>s.put(v,id)),pGet=id=>tx("readonly",s=>s.get(id)),pDel=id=>tx("readwrite",s=>s.delete(id));
+tx("readonly",s=>s.getAllKeys()).then(k=>{PH=new Set(k);draw()}).catch(()=>{});
+function shrink(file){return new Promise((ok,ko)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const z=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*z);c.height=Math.round(im.height*z);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",0.72))};im.onerror=()=>ko(new Error("img"));im.src=u})}
+async function savePh(id,file){try{await pPut(id,await shrink(file));PH.add(id);draw();return true}catch(e){uiAlert("Impossibile salvare la foto su questo dispositivo.");return false}}
+function d2b(u){const p=u.split(","),s=atob(p[1]),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return new Blob([a],{type:"image/jpeg"})}
+function refd(id){return S.ex.some(x=>x.id===id)||Object.values(lib()).some(n=>(n.ex||[]).some(x=>x.id===id))}
+function gc(id){if(refd(id))return;pDel(id).then(()=>{PH.delete(id);draw()}).catch(()=>{})}
+function delEx(i){const e=S.ex[i];S.ex.splice(i,1);if(ED===i)cancelEd();else if(ED>i)ED--;save();draw();if(e&&e.id)gc(e.id)}
+async function phShow(){try{const v=await pGet(CP.id);if(!v)return;$("ovi").src=v;$("ov").style.display="flex"}catch(e){uiAlert("Foto non disponibile.")}}
+function phView(i){const e=S.ex[i];if(!e)return;if(!e.id){e.id=uid();save()}CP=e;if(PH.has(e.id))phShow();else $("ph2").click()}
+$("ph2").onchange=async()=>{const f=$("ph2").files[0];$("ph2").value="";if(f&&CP&&await savePh(CP.id,f))phShow()};
+$("ovc").onclick=()=>{$("ov").style.display="none";$("ovi").removeAttribute("src")};
+$("ovr").onclick=()=>$("ph2").click();
+$("ovd").onclick=async()=>{if(!CP||!(await uiAsk("Eliminare la foto di questo scontrino?")))return;try{await pDel(CP.id);PH.delete(CP.id);$("ovc").onclick();draw()}catch(e){uiAlert("Impossibile eliminare la foto.")}};
+$("ovs").onclick=async()=>{try{const v=await pGet(CP.id),dl=await window.claude.use("downloads");await dl.save({filename:"scontrino-"+(CP.dt||"")+".jpg",data:d2b(v)})}catch(e){if(e&&e.code==="declined")return;uiAlert("Non sono riuscito a salvare la foto. Tieni premuto sull'immagine e scegli Salva.")}};
+const KNOWN={ASCK:"Acc.NO FLAT by CCC",SRCK:"Extra Baggage Paid by CCC",VRCK:"Meal CCC",VRNR:"Meal Reimburse",OTCK:"Oth Trv Exp by CCC",RSNR:"Rimb. Forfett. (25,82)",TPCK:"Transport CCC",TPNR:"Transport Reimb",WICK:"Withdrawal by CCC"};
+function getCodes(){let c={};try{c=JSON.parse(localStorage.getItem("nscodes")||"{}")}catch(e){}return Object.assign({},KNOWN,c)}
+function putCodes(c){try{localStorage.setItem("nscodes",JSON.stringify(c))}catch(e){}}
+function d2g(i){const p=(i||"").split("-");return p.length===3?p[2]+"."+p[1]+"."+p[0]:""}
+function buildGD(st,codes){const rev={};Object.keys(codes).forEach(c=>{rev[codes[c]]=c});
+const q=s=>{s=String(s==null?"":s);return/[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s},row=a=>{a=a.slice();while(a.length<9)a.push("");return a.map(q).join(",")};
+const L=[row([st.gdver||"3"]),row(["GD"]),row([st.matr||"",st.gdref||"C005"]),row([d2g(st.d1)]),row([d2g(st.d2)]),row([" "])];let skip=0;
+st.ex.forEach(e=>{const c=rev[VOCI[e.v][0]];if(!c){skip++;return}const rt=e.val==="EUR"?"":((e.val===st.v2?st.tasso:e.val===st.v3?st.tasso3:"")+" ");L.push(row([c,Number(e.imp).toFixed(2),e.val,rt,d2g(e.pd||e.dt),d2g(e.dt),d2g(e.td||e.dt),e.nt||"",String(e.p||1)]))});
+while(L.length<1005)L.push(",,,,,,,,");return{text:L.join("\r\n")+"\r\n",skip}}
+async function exportCsv(){const say=t=>{$("csvm").textContent=t};say("");
+if(!String(S.matr||"").trim()){say("Inserisci la matricola in Trasferta prima di esportare il CSV.");return}
+if(!S.ex.length){say("Non ci sono spese da esportare.");return}
+const codes=getCodes(),rev={};Object.keys(codes).forEach(c=>{rev[codes[c]]=c});
+const miss=[...new Set(S.ex.map(e=>VOCI[e.v][0]).filter(n=>!rev[n]))];
+if(miss.length){const bx=document.createElement("div");miss.forEach(n=>{const l=document.createElement("label");l.textContent=n;const i=document.createElement("input");i.maxLength=6;i.placeholder="Codice GD, es. VRCK";i.dataset.n=n;i.style.marginBottom="8px";bx.append(l,i)});
+if(!(await uiDlg("Queste voci non hanno ancora un codice GD. Scrivi il codice di ciascuna: se lo lasci vuoto, le spese di quella voce non finiscono nel file.",{ok:"Esporta",body:bx}))){say("Esportazione annullata.");return}
+bx.querySelectorAll("input").forEach(i=>{const c=i.value.trim().toUpperCase();if(c)codes[c]=i.dataset.n});putCodes(codes)}
+const o=buildGD(S,codes);if(o.skip>=S.ex.length){say("Nessuna spesa esportata: mancano i codici GD delle voci.");return}
+const t=new Date(),nm=String(S.matr).trim().replace(/[^\w.-]/g,"")+"-"+(S.gdref||"C005")+"_"+String(t.getDate()).padStart(2,"0")+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+t.getFullYear()+".csv",f=new File([o.text],nm,{type:"text/csv"}),note=o.skip?" ("+o.skip+" spese senza codice non incluse)":"";
+try{const dl=window.claude?await window.claude.use("downloads"):null;if(dl){try{await dl.save({filename:nm,data:o.text});say("File salvato: "+nm+note);return}catch(e){if(e&&e.code==="declined"){say("Salvataggio annullato.");return}}}}catch(e){}
+try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});say("File condiviso: "+nm+note);return}}catch(e){if(e.name==="AbortError"){say("Condivisione annullata.");return}}
+try{await navigator.clipboard.writeText(o.text);say("Salvataggio non disponibile: il contenuto del CSV \u00e8 stato copiato negli appunti."+note)}catch(e){say("Salvataggio e copia non disponibili su questo dispositivo.")}}
+function crc32(u){if(!crc32.t){crc32.t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;crc32.t[n]=c>>>0}}let crc=-1;for(let i=0;i<u.length;i++)crc=crc32.t[(crc^u[i])&255]^(crc>>>8);return(crc^-1)>>>0}
+function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[],D=new Date(),dd=((D.getFullYear()-1980)<<9)|((D.getMonth()+1)<<5)|D.getDate(),tm=(D.getHours()<<11)|(D.getMinutes()<<5)|(D.getSeconds()>>1);
+const u16=(a,v)=>a.push(v&255,(v>>8)&255),u32=(a,v)=>{u16(a,v&0xFFFF);u16(a,(v>>>16)&0xFFFF)};let off=0;
+files.forEach(f=>{const nm=enc.encode(f.name),c=crc32(f.data),n=f.data.length,h=[];u32(h,0x04034b50);u16(h,20);u16(h,0x0800);u16(h,0);u16(h,tm);u16(h,dd);u32(h,c);u32(h,n);u32(h,n);u16(h,nm.length);u16(h,0);parts.push(new Uint8Array(h),nm,f.data);
+const e=[];u32(e,0x02014b50);u16(e,20);u16(e,20);u16(e,0x0800);u16(e,0);u16(e,tm);u16(e,dd);u32(e,c);u32(e,n);u32(e,n);u16(e,nm.length);u16(e,0);u16(e,0);u16(e,0);u16(e,0);u32(e,0);u32(e,off);cd.push(new Uint8Array(e),nm);off+=h.length+nm.length+n});
+let cs=0;cd.forEach(x=>{cs+=x.length});const en=[];u32(en,0x06054b50);u16(en,0);u16(en,0);u16(en,files.length);u16(en,files.length);u32(en,cs);u32(en,off);u16(en,0);
+return new Blob([...parts,...cd,new Uint8Array(en)],{type:"application/zip"})}
+async function exportZip(){const say=t=>{$("zipm").textContent=t};say("Preparo il file...");
+try{const base=(($("nm").value.trim()||[S.matr,S.cliente].filter(Boolean).join(" ")||"nota-spese").replace(/[^\w -]/g,"").trim()||"nota-spese"),enc=new TextEncoder(),files=[];
+files.push({name:"nota.json",data:enc.encode(JSON.stringify({app:"nota-spese",v:1,S:S}))});
+try{const pb=await pdf(true);if(pb)files.push({name:"riepilogo.pdf",data:new Uint8Array(pb)})}catch(e){}
+let n=0;const ord=S.ex.map((e,i)=>({e,i})).sort((a,b)=>a.e.dt<b.e.dt?-1:a.e.dt>b.e.dt?1:VOCI[a.e.v][0].localeCompare(VOCI[b.e.v][0],"it")||a.i-b.i);
+for(const {e} of ord){if(!e.id||!PH.has(e.id))continue;const u=await pGet(e.id);if(!u)continue;n++;files.push({name:"foto/"+String(n).padStart(2,"0")+"_"+(e.dt||"")+"_"+VOCI[e.v][0].replace(/[^\w-]+/g,"_")+".jpg",data:new Uint8Array(await d2b(u).arrayBuffer())})}
+const blob=zipStore(files),fname=base+".zip";
+try{const dl=window.claude?await window.claude.use("downloads"):null;if(dl){try{await dl.save({filename:fname,data:blob});say("File salvato: "+fname+" ("+n+" foto)");return}catch(e){if(e&&e.code==="declined"){say("Salvataggio annullato.");return}}}}catch(e){}
+const f=new File([blob],fname,{type:"application/zip"});
+try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});say("File condiviso: "+fname+" ("+n+" foto)");return}}catch(e){if(e.name==="AbortError"){say("Condivisione annullata.");return}}
+say("Salvataggio non disponibile su questo dispositivo.")}catch(e){say("Non sono riuscito a creare il file ZIP.")}}
+$("zipb").onclick=exportZip;
+$("csve").onclick=exportCsv;
+$("pd").onclick=pdf;
+sl();vals();draw();
+</script><script>if("serviceWorker"in navigator&&/^https?:$/.test(location.protocol)&&!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script></body></html>
