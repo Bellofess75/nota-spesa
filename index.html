@@ -41,7 +41,7 @@ details.card[open]>summary::after{transform:rotate(270deg)}details.card>.f{paddi
 <div><label>Valuta</label><select id="val"></select></div></div>
 <div class="row" style="margin-top:10px"><div><label>Data spesa</label><input id="dt" type="date"></div><div><label>Data pagamento</label><input id="pd" type="date"></div></div><div class="hint" style="margin:4px 0 0">Data pagamento: dentro il periodo della trasferta; lasciala vuota se pagata lo stesso giorno. Es. hotel pagato l’ultimo giorno: inserisci ogni notte con la sua data spesa e la stessa data pagamento.</div><div style="margin-top:10px"><label>Nota</label><input id="nt" placeholder="facoltativa"></div>
 <div id="pw" style="margin-top:10px;display:none"><label>Persone tra cui dividere la spesa</label><select id="pers"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
-<div style="margin-top:10px"><label>Foto scontrino (facoltativa)</label><input id="ph" type="file" accept="image/*"></div>
+<div style="margin-top:10px"><label>Foto scontrino (facoltativa)</label><input id="ph" type="file" accept="image/*" capture="environment"></div>
 <div class="err" id="err"></div><button class="p" id="add">Aggiungi spesa</button><button class="p" id="can" style="display:none;background:none;color:var(--mu);border:1px solid var(--ln);margin-top:8px">Annulla modifica</button></div>
 <h2>Spese inserite</h2><div class="card" id="lst"></div></section>
 
@@ -92,7 +92,7 @@ details.card[open]>summary::after{transform:rotate(270deg)}details.card>.f{paddi
 
 <div id="dlg" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:20px"><div class="card" style="max-width:420px;width:100%;margin:0;max-height:85%;overflow:auto"><div id="dlgm" style="white-space:pre-wrap;margin-bottom:12px"></div><div id="dlgx"></div><div style="display:flex;gap:10px;margin-top:6px"><button class="p" id="dlgn" style="margin:0;flex:1;background:none;color:var(--mu);border:1px solid var(--ln)">Annulla</button><button class="p" id="dlgy" style="margin:0;flex:1">OK</button></div></div></div>
 <div id="ov" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.93);flex-direction:column;gap:10px;padding:calc(12px + max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px))) 12px calc(12px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)))"><div style="flex:1;min-height:0;overflow:auto;text-align:center"><img id="ovi" alt="Scontrino" style="max-width:100%;border-radius:8px"></div><div class="row"><button class="p" id="ovs" style="margin:0">Condividi / salva</button><button class="p" id="ovr" style="margin:0;background:var(--ccc)">Sostituisci</button><button class="p" id="ovd" style="margin:0;background:var(--bad)">Elimina foto</button><button class="p" id="ovc" style="margin:0;background:none;border:1px solid #888">Chiudi</button></div></div>
-<input id="ph2" type="file" accept="image/*" style="display:none">
+<input id="ph2" type="file" accept="image/*" capture="environment" style="display:none">
 <script>
 /* Salvataggio file per la app installata: sostituisce la funzione dell'ambiente Claude.
    Su iPhone/Android (app Capacitor) usa Filesystem + foglio di condivisione, dove compare anche OneDrive.
