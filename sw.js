@@ -1,6 +1,6 @@
 /* Service worker: fa funzionare la app anche senza rete.
    Per pubblicare un aggiornamento cambia il numero di VERSIONE qui sotto. */
-const VERSIONE = "nota-spese-v14-r13";
+const VERSIONE = "nota-spese-v14-r14";
 const GUSCIO = ["./", "index.html", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];
 
